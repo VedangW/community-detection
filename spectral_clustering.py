@@ -7,6 +7,16 @@ from sklearn.cluster import KMeans
 def normalize_eigenvectors(e):
     """
     Normalizes an eigenvector
+
+    Parameters
+    ----------
+    e: 1D np.array
+    	A single eigenvector
+
+    Returns
+    -------
+    e: 1D np.array
+    	Normalized eigenvector
     """
     return e/np.sqrt(np.sum(e**2))
 
@@ -84,12 +94,25 @@ def generate_labels_dict(G, kmeans):
 
 def visualize_graph(G, pos, labels_dict=None, colors=None, node_size=100, edge_alpha=0.1, labels=False):
     """
-    Visualizes graph with clusters as different colors
+    Visualizes graph with clusters as different colors.
+
+    Parameters
+    ----------
+    G: nx.graph
+    	Graph to visualize
+    pos: nx layout (Dict)
+    	Layout of the graph
+	labels_dict: Dict[int, List[int]]
+	colors: List[str]
+	node_size: int
+	edge_alpha: float
+	labels: bool
     """
 
+    # Draw nodes
     if labels_dict is not None and colors is not None:
         for k, v in labels_dict.items():
-            # nodes
+
             nx.draw_networkx_nodes(G, 
                 pos,
                 nodelist=v,
@@ -99,16 +122,44 @@ def visualize_graph(G, pos, labels_dict=None, colors=None, node_size=100, edge_a
     else:
         nx.draw_networkx_nodes(G, pos, node_size=node_size) 
         
+    # Add labels
     if labels:
         nx.draw_networkx_labels(G, pos)
 
+    # Draw edges
     nx.draw_networkx_edges(G, pos, width=1.0, alpha=edge_alpha)
 
 
 def spectral_clustering(G, k, pos, colors, visualize=True, laplacian_type="unnormalized", **kwargs):
     """
-    Implement spectral clustering
+    Implements spectral clustering.
+
+    Parameters
+    ----------
+    G: nx.graph
+    	Graph on which to perform spectral clustering
+    k: int
+    	Initial estimate of the no. of clusters
+    pos: nx layout
+    	The spring layout of the graph
+    colors: List[str]
+    	List of colours to use for visualization
+    visualize: bool
+    	True if we need to visualize else False
+    laplacian_type: str
+    	"unnormalized", "symmetric" or "random_walk"
+    kwargs:
+    	node_size: Size of nodes in the plot
+    	edge_alpha: Opacity of the edges
+    	labels: True if to show labels in the plot
+
+    Returns
+    -------
+    labels_dict: Dict[int, List[int]]
+    	Mapping between community number and nodes in
+    	that community
     """
+
     # Calculate Laplacian
     L = laplacian(G, laplacian_type=laplacian_type)
 
@@ -118,6 +169,7 @@ def spectral_clustering(G, k, pos, colors, visualize=True, laplacian_type="unnor
     # Use eigenvectors as features
     U = eig_vectors.real
     
+    # If L is symmetric, then normalize
     if laplacian_type == "symmetric":
         U = np.apply_along_axis(normalize_eigenvectors, 0, U)
 
@@ -137,29 +189,46 @@ def spectral_clustering(G, k, pos, colors, visualize=True, laplacian_type="unnor
 
     return labels_dict
 
+
+#### Experiments
+
+# List of colors in the plots
 COLORS = \
     ["tab:blue", "tab:orange", "tab:green", 
      "tab:red", "tab:purple", "tab:brown", 
      "tab:pink", "tab:gray", "tab:olive", 
      "tab:cyan"]
 
+
+### Zachary's Karate Club Network
+
+# Initialize graph
 G_kk = nx.karate_club_graph()
 pos_kk = nx.spring_layout(G_kk)
 
+# Visualize the graph
 visualize_graph(G_kk, pos_kk)
 
+# Visualize graph after spectral clustering
 labels_dict = spectral_clustering(G_kk, 2, pos_kk, COLORS, laplacian_type="symmetric")
 
+
+### Planted L-Partition Model
+
+# Model parameters
 K = 5
 NODES_PER_BUCKET = 200
 P_IN = 0.8
 P_OUT = 0.1
 
+# Generate graph
 G_pl = nx.generators.community.planted_partition_graph(K, NODES_PER_BUCKET, P_IN, P_OUT)
 pos_pl = nx.spring_layout(G_pl)
 
+# Visualize original graph
 visualize_graph(G_pl, pos_pl, edge_alpha=0.1, node_size=10, labels=False)
 
+# Dictionary of labels
 labels_dict = spectral_clustering(G_pl, 
                                   K, 
                                   pos_pl, 
