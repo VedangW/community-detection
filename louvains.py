@@ -3,6 +3,47 @@
 
 import networkx as nx
 
+def louvains_method(nodes, edges, m, k_i, w, edges_of_node, communities, actual_partition):
+
+    best_community_list = [[n] for n in nodes]
+    modularity = -1
+
+    while 1:
+
+        community_list, communities, sigma_in, sigma_tot = modularity_optimisation(nodes, edges, communities, edges_of_node, w, k_i, m)
+
+        new_modularity = 0
+        for i in range(len(community_list)):
+            new_modularity += sigma_in[i] / (m*2) - (sigma_tot[i] / (m*2) ) ** 2
+
+        community_list = [n for n in community_list if n]
+
+        if actual_partition:
+            actual = []
+            for p in community_list:
+                part = []
+                for node in p:
+                    part.extend(actual_partition[node])
+                actual.append(part)
+            actual_partition = actual
+            
+        else:
+            actual_partition = community_list
+            
+        if new_modularity == modularity:
+            break
+  
+        new_nodes, new_edges, k_i, edges_of_node, w, communities = community_aggregation(nodes, edges, community_list, k_i, edges_of_node, communities, w)
+        
+        nodes = new_nodes
+        edges = new_edges
+        
+        best_community_list = community_list
+        modularity = new_modularity
+
+    
+    return (actual_partition, modularity)
+
 
 
 def modularity_optimisation(nodes, edges, communities, edges_of_node, w, k_i, m):
