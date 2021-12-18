@@ -1,13 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[323]:
-
-
 import networkx as nx
 
-
-# In[324]:
 
 
 def modularity_optimisation(nodes, edges, communities, edges_of_node, w, k_i, m):
@@ -95,7 +90,6 @@ def modularity_optimisation(nodes, edges, communities, edges_of_node, w, k_i, m)
     return best_community_list, communities, sigma_in, sigma_tot
 
 
-# In[325]:
 
 
 def community_aggregation(nodes, edges, community_list, k_i, edges_of_node, communities, w):
@@ -147,7 +141,6 @@ def community_aggregation(nodes, edges, community_list, k_i, edges_of_node, comm
     return (new_nodes, new_edges, k_i, edges_of_node, w, communities)
 
 
-# In[326]:
 
 
 def calc_wts(nodes, edges):
@@ -157,7 +150,7 @@ def calc_wts(nodes, edges):
     for e in edges:
             m += e[1]
             k_i[e[0][0]] += e[1]
-            k_i[e[0][1]] += e[1] # there's no self-loop initially
+            k_i[e[0][1]] += e[1]
     return m, k_i
 
 def get_edges_of_node(edges):
@@ -181,8 +174,6 @@ def add_weight_to_edge(edges):
     return edge_list
 
 
-# In[327]:
-
 
 def zachary():
     
@@ -200,9 +191,7 @@ def zachary():
     
 def plantedl():
 
-    G = nx.planted_partition_graph(5, 100, 0.5, 0.1, seed=42)
-#     G = nx.planted_partition_graph(5, 200, 0.8, 0.1, seed=42)
-#     G = nx.planted_partition_graph(2, 200, 0.6, 0.3, seed=42)
+    G = nx.planted_partition_graph(5, 200, 0.8, 0.1, seed=42)
     initial_vertices = list(G.nodes)
     initial_edges = add_weight_to_edge(list(G.edges))
 
@@ -215,8 +204,6 @@ def plantedl():
     return G, louvains_method(initial_vertices, initial_edges, m, k_i, w, edges_of_node, communities, full_community_list)
     
 
-
-# In[328]:
 
 
 def visualize_graph(G, pos, labels_dict=None, colors=None, node_size=100, edge_alpha=0.1, labels=False):
@@ -242,21 +229,16 @@ def visualize_graph(G, pos, labels_dict=None, colors=None, node_size=100, edge_a
     nx.draw_networkx_edges(G, pos, width=1.0, alpha=edge_alpha)
 
 
-# In[329]:
 
 
 result = plantedl()
-# print(result)
 G = result[0]
 final_partition = result[1][0]
-
 final_modularity = result[1][1]
-# print(final_modularity)
 
 pos = nx.spring_layout(G)
 
 labels_dict = {i: final_partition[i] for i in range(len(final_partition))}
-print(labels_dict.keys())
 
 COLORS =     ["tab:blue", "tab:orange", "tab:green", 
      "tab:red", "tab:purple", "tab:brown", 
@@ -264,20 +246,9 @@ COLORS =     ["tab:blue", "tab:orange", "tab:green",
      "tab:cyan"]
 
 
-# In[330]:
 
 
 visualize_graph(G, pos, labels_dict=None, colors=COLORS, node_size=10)
 
-
-# In[331]:
-
-
 visualize_graph(G, pos, labels_dict=labels_dict, colors=COLORS, node_size=10)
-
-
-# In[ ]:
-
-
-
 
