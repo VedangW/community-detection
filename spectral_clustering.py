@@ -192,50 +192,56 @@ def spectral_clustering(G, k, pos, colors, visualize=True, laplacian_type="unnor
 	return labels_dict
 
 
-#### Experiments
+def main():
 
-# List of colors in the plots
-COLORS = \
-	["tab:blue", "tab:orange", "tab:green", 
-	 "tab:red", "tab:purple", "tab:brown", 
-	 "tab:pink", "tab:gray", "tab:olive", 
-	 "tab:cyan"]
+	#### Experiments
 
-
-### Zachary's Karate Club Network
-
-# Initialize graph
-G_kk = nx.karate_club_graph()
-pos_kk = nx.spring_layout(G_kk)
-
-# Visualize the graph
-visualize_graph(G_kk, pos_kk)
-
-# Visualize graph after spectral clustering
-labels_dict = spectral_clustering(G_kk, 2, pos_kk, COLORS, laplacian_type="symmetric")
+	# List of colors in the plots
+	COLORS = \
+		["tab:blue", "tab:orange", "tab:green", 
+		 "tab:red", "tab:purple", "tab:brown", 
+		 "tab:pink", "tab:gray", "tab:olive", 
+		 "tab:cyan"]
 
 
-### Planted L-Partition Model
+	### Zachary's Karate Club Network
 
-# Model parameters
-K = 5
-NODES_PER_BUCKET = 200
-P_IN = 0.8
-P_OUT = 0.1
+	# Initialize graph
+	G_kk = nx.karate_club_graph()
+	pos_kk = nx.spring_layout(G_kk)
 
-# Generate graph
-G_pl = nx.generators.community.planted_partition_graph(K, NODES_PER_BUCKET, P_IN, P_OUT)
-pos_pl = nx.spring_layout(G_pl)
+	# Visualize the graph
+	visualize_graph(G_kk, pos_kk)
 
-# Visualize original graph
-visualize_graph(G_pl, pos_pl, edge_alpha=0.1, node_size=10, labels=False)
+	# Visualize graph after spectral clustering
+	labels_dict = spectral_clustering(G_kk, 2, pos_kk, COLORS, laplacian_type="symmetric")
 
-# Dictionary of labels
-labels_dict = spectral_clustering(G_pl, 
-								  K, 
-								  pos_pl, 
-								  COLORS, 
-								  laplacian_type="symmetric", 
-								  edge_alpha=0.1, 
-								  node_size=10, 
-								  labels=False)
+
+	### Planted L-Partition Model
+
+	# Model parameters
+	K = 5
+	NODES_PER_BUCKET = 200
+	P_IN = 0.8
+	P_OUT = 0.1
+
+	# Generate graph
+	G_pl = nx.generators.community.planted_partition_graph(K, NODES_PER_BUCKET, P_IN, P_OUT)
+	pos_pl = nx.spring_layout(G_pl)
+
+	# Visualize original graph
+	visualize_graph(G_pl, pos_pl, edge_alpha=0.1, node_size=10, labels=False)
+
+	# Dictionary of labels
+	labels_dict = spectral_clustering(G_pl, 
+									  K, 
+									  pos_pl, 
+									  COLORS, 
+									  laplacian_type="symmetric", 
+									  edge_alpha=0.1, 
+									  node_size=10, 
+									  labels=False)
+
+
+if __name__ == "__main__":
+	main()
