@@ -63,10 +63,10 @@ visualize_graph(G_kk, pos_kk)
 
 # Use Spectral clustering and visualize
 labels_dict = spectral_clustering(G_kk, 
-								  3, 
-								  pos_kk, 
-								  COLORS, 
-								  laplacian_type="symmetric")
+				  3, 
+				  pos_kk, 
+				  COLORS, 
+				  laplacian_type="symmetric")
 ```
 
 We get the following graphs by varying the value of `k`.
