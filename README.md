@@ -18,11 +18,11 @@ We tested our library on the Planted L-Partition Model (specifications in code) 
 
 Planted L-Partition Model
 
-![spectral_plantedl.png](Community%20Detection%20fbb848c323ed4924bb62d0c0c8ef9a3c/spectral_plantedl.png)
+![spectral_plantedl.png](images/spectral_plantedl.png)
 
 Zachary’s Karate Club Network
 
-![spectral_zachary.png](Community%20Detection%20fbb848c323ed4924bb62d0c0c8ef9a3c/spectral_zachary.png)
+![spectral_zachary.png](images/spectral_zachary.png)
 
 ### Algorithms and Usage
 
