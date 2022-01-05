@@ -28,9 +28,9 @@ P_IN = 0.8
 P_OUT = 0.1
 
 G_pl = nx.generators.community.planted_partition_graph(K, 
-													   NODES_PER_BUCKET, 
-													   P_IN, 
-													   P_OUT)
+						       NODES_PER_BUCKET, 
+						       P_IN, 
+						       P_OUT)
 pos_pl = nx.spring_layout(G_pl)
 
 # Visualize base graph
