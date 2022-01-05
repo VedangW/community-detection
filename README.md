@@ -4,6 +4,26 @@ A library for Community Detection in graphs.
 
 ---
 
+### Introduction
+
+Community Detection (or Community Search) is the process of finding sets of densely connected nodes in a graph which are structurally close to each other. We use the following algorithms in this library:
+
+- Spectral Clustering
+- Louvain Method
+- Girvan-Newman algorithm
+
+### Application
+
+We tested our library on the Planted L-Partition Model (specifications in code) and Zachary’s Karate Club Network to visualize the results.
+
+Planted L-Partition Model
+
+![spectral_plantedl.png](Community%20Detection%20fbb848c323ed4924bb62d0c0c8ef9a3c/spectral_plantedl.png)
+
+Zachary’s Karate Club Network
+
+![spectral_zachary.png](Community%20Detection%20fbb848c323ed4924bb62d0c0c8ef9a3c/spectral_zachary.png)
+
 ### Algorithms and Usage
 
 **Spectral Clustering**
@@ -47,10 +67,6 @@ labels_dict = spectral_clustering(G_pl,
                                   labels=False)
 ```
 
-Some example clustering instances:
-
-![spectral_plantedl.png](images/spectral_plantedl.png)
-
 Test on Zachary’s Karate Club Network
 
 ```python
@@ -69,6 +85,52 @@ labels_dict = spectral_clustering(G_kk,
 				  laplacian_type="symmetric")
 ```
 
-We get the following graphs by varying the value of `k`.
+**Louvain Method**
 
-![spectral_zachary.png](images/spectral_zachary.png)
+Test on Planted L-Partition Model
+
+```python
+import networkx as nx
+from cdet.louvains import visualize_graph, louvains_method, plantedl
+
+# Color scheme
+COLORS = \
+    ["tab:blue", "tab:orange", "tab:green", 
+     "tab:red", "tab:purple", "tab:brown", 
+     "tab:pink", "tab:gray", "tab:olive", 
+     "tab:cyan"]
+
+result = plantedl()
+
+G = result[0]
+pos = nx.spring_layout(G)
+
+final_partition = result[1][0]
+final_modularity = result[1][1]
+
+labels_dict = {i: final_partition[i] for i in range(len(final_partition))}
+
+# Visualize clustered graph
+visualize_graph(G, pos, labels_dict=labels_dict, colors=COLORS, node_size=10)
+```
+
+**Girvan-Newman**
+
+You can use the original Networkx visualization options to visualize the outcomes from the algorithms as well.
+
+Test on Planted L-Partition Model
+
+```python
+# Original Planted L-Partition Graph
+G = nx.planted_partition_graph(5, 30, 0.8, 0.1)
+pos = nx.spring_layout(G, k=0.1, iterations=30, scale=1.3)
+
+# Visualize using networkx API
+nx.draw_networkx_nodes(G, pos=pos)
+nx.draw_networkx_labels(G, pos=pos)
+nx.draw_networkx_edges(G, pos=pos, width=2, alpha=1, edge_color='k')
+plt.show() 
+
+# Planted L-Partition Graph graph with 2 communities
+visualize_community_structure(num_communities=2, G)
+```
