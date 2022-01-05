@@ -28,9 +28,9 @@ P_IN = 0.8
 P_OUT = 0.1
 
 G_pl = nx.generators.community.planted_partition_graph(K, 
-																											 NODES_PER_BUCKET, 
-																											 P_IN, 
-																											 P_OUT)
+													   NODES_PER_BUCKET, 
+													   P_IN, 
+													   P_OUT)
 pos_pl = nx.spring_layout(G_pl)
 
 # Visualize base graph
@@ -63,10 +63,10 @@ visualize_graph(G_kk, pos_kk)
 
 # Use Spectral clustering and visualize
 labels_dict = spectral_clustering(G_kk, 
-																	3, 
-																	pos_kk, 
-																	COLORS, 
-																	laplacian_type="symmetric")
+								  3, 
+								  pos_kk, 
+								  COLORS, 
+								  laplacian_type="symmetric")
 ```
 
 We get the following graphs by varying the value of `k`.
